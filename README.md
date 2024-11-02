@@ -23,7 +23,7 @@ $ prs10stat --help
 ```
 
 ```
-usage: prs10stat [-h] [--full] [-c COMMAND [COMMAND ...]] [device]
+usage: prs10stat [-h] [-a] [-c COMMAND [COMMAND ...]] [device]
 
 Get the current status of the Rubidium Frequency Standard Model PRS10.
 
@@ -32,7 +32,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --full                Show all status bits.
+  -a, --all             Show all status bits.
   -c COMMAND [COMMAND ...], --command COMMAND [COMMAND ...]
                         Send a command.
 ```
