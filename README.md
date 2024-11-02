@@ -23,17 +23,18 @@ $ prs10stat --help
 ```
 
 ```
-usage: prs10stat [-h] [-s] [--full] device
+usage: prs10stat [-h] [--full] [-c COMMAND [COMMAND ...]] [device]
 
 Get the current status of the Rubidium Frequency Standard Model PRS10.
 
 positional arguments:
-  device         Serial device where the RS-232C port of PRS10 is mounted.
+  device                Serial device where the RS-232C port of PRS10 is mounted. Default is `/dev/ttyUSB0`.
 
 options:
-  -h, --help     show this help message and exit
-  -s, --summary  Show summary
-  --full         Show all status bits.
+  -h, --help            show this help message and exit
+  --full                Show all status bits.
+  -c COMMAND [COMMAND ...], --command COMMAND [COMMAND ...]
+                        Send a command.
 ```
 
 Example output:
