@@ -8,7 +8,9 @@ def prs10stat():
     )
     argp.add_argument(
         "device",
-        help="Serial device where the RS-232C port of PRS10 is mounted."
+        help="Serial device where the RS-232C port of PRS10 is mounted. Default is `/dev/ttyUSB0`.",
+        nargs="?",
+        default="/dev/ttyUSB0"
     )
     argp.add_argument(
         "--full", action="store_true",
