@@ -13,7 +13,7 @@ def prs10stat():
         default="/dev/ttyUSB0"
     )
     argp.add_argument(
-        "--full", action="store_true",
+        "-a", "--all", action="store_true",
         help="Show all status bits."
     )
     argp.add_argument(
@@ -31,7 +31,7 @@ def prs10stat():
             print(f"CASE TEMP. : {prs10.case_temperature:.2f} ℃")
             print("IS LOCKED? :", prs10.is_locked)
             print("STATUS BITS:")
-            print(prs10.status.to_str(indent=2, compress=not args.full))
+            print(prs10.status.to_str(indent=2, compress=not args.all))
         else:
             prs10.timeout = 0.1
             ans = prs10.write(" ".join(args.command)).read()
