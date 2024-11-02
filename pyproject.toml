@@ -18,4 +18,4 @@ dependencies = [
 package-dir = {"" = "src"}
 
 [project.scripts]
-prs10stat = "prs10.__main__:main"
+prs10stat = "prs10.__main__:prs10stat"

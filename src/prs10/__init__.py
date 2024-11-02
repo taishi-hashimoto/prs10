@@ -7,36 +7,59 @@ import serial
 class PRS10:
     "Rubidium Frequency Standard Model PRS10 by Stanford Research Systems"
 
-    def __init__(self, device: str):
-        """"""
+    def __init__(self, device: str, timeout: float = 1):
+        """Initialize the RS-232C connection.
+        
+        Parameters
+        ==========
+        device: str
+            The serial device path.
+        timeout: float
+            Timeout in seconds. Default is 1 second.
+        """
         self._device = device
         self._s = None
+        self._timeout = timeout
 
-    def __enter__(self):
-        self.open(self._device)
-        return self
+    def __enter__(self) -> 'PRS10':
+        return self.open(self._device, self._timeout)
 
     def __exit__(self, ex_type, ex_value, trace):
         self.close()
 
-    def open(self, device):
+    def open(self, device: str, timeout: float = 1) -> 'PRS10':
         self._device = device
         self._s = serial.Serial(
             port=device,
             baudrate=9600,
             bytesize=serial.EIGHTBITS,
             parity=serial.PARITY_NONE,
-            xonxoff=True
+            xonxoff=True,
+            timeout=timeout
         )
+        return self
 
     def close(self):
         self._s.close()
+        self._s = None
+
+    @property
+    def timeout(self) -> float:
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        self._timeout = value
+        if self._s is not None:
+            self._s.timeout = self._timeout
 
     def write(self, command: str) -> 'PRS10':
+        "Send command to PRS10."
         self._s.write(command.encode() + serial.CR)
         return self
 
     def read(self) -> str:
+        "Get response from PRS10."
         return self._s.read_until(serial.CR).rstrip(serial.CR).decode()
 
     @property
@@ -61,7 +84,8 @@ class PRS10:
     def case_temperature(self) -> float:
         """Return the case temperature in degrees Celcius.
         
-        NOTE:AD10?: Case temperature (10 mV/℃).
+        NOTE:
+            AD10?: Case temperature (10 mV/℃).
             This sensor indicates a temperature which is about midway between
             the baseplate temperature and the lamp temperature.
         """
@@ -78,7 +102,7 @@ class PRS10:
         return self.StatusBytes(self.write("ST?").read())
 
     class StatusBytes:
-        "Status Bytes returned by ST? command."
+        "Status Bytes returned by `ST?` command."
 
         BYTES = [
             "ST1: Power supplies and Discharge Lamp",
@@ -223,7 +247,7 @@ class PRS10:
             else:
                 return self._values[index]
 
-        def to_str(self, indent: int = 0, compress: bool = False):
+        def to_str(self, indent: int = 0, compress: bool = False) -> str:
             """Return the string representation of status bytes.
             
             Parameters
