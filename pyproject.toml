@@ -8,7 +8,7 @@ description = "Commanding and monitoring library for the Rubidium Frequency Stan
 authors = [
   {name = "Taishi Hashimoto", email = "hashimoto.taishi@nipr.ac.jp"},
 ]
-version = "2024.11.01"
+version = "2024.11.02"
 requires-python = ">= 3.10"
 dependencies = [
     "pyserial"
