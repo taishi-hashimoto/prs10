@@ -2,6 +2,7 @@
 
 import io
 import serial
+from collections import defaultdict
 
 
 class PRS10:
@@ -232,12 +233,19 @@ class PRS10:
             ]
         ]
 
-        def __init__(self, values: str):
+        def __init__(self, raw: str):
             "Parse status bytes values returned by ST? command."
-            self._values = [f"{c:08b}" for c in map(int, values.split(","))]
+            self._raw = raw
+            self._values = [[b == "1" for b in f"{c:08b}"] for c in map(int, raw.split(","))]
 
         @property
-        def values(self) -> list[str]:
+        def raw(self) -> str:
+            "Raw representation read from PRS10."
+            return self._raw
+
+        @property
+        def values(self) -> list[list[bool]]:
+            "Boolean matrix indicating which bits are set."
             return self._values
 
         def __getitem__(self, index):
@@ -264,15 +272,16 @@ class PRS10:
             width = max(len(each) for block in self.CONDITIONS for each in block)
             out = io.StringIO()
             for i, (bits, name, descriptions, actions) in enumerate(zip(self._values, self.BYTES, self.CONDITIONS, self.CORRECTIVE_ACTIONS)):
-                print(f"{'':{indent}s}{bits} {name}", file=out)
+                zero_one = "".join("1" if bit else "0" for bit in bits)
+                print(f"{'':{indent}s}{zero_one} {name}", file=out)
                 for j, (bit, description, action) in enumerate(zip(bits[::-1], descriptions[::-1], actions[::-1])):
                     if compress:
-                        if bit != "1":
+                        if not bit:
                             continue
                         else:
                             bars = ""
                             for k in range(7 - j):
-                                if bits[k] == "1":
+                                if bits[k]:
                                     bars += "│"
                                 else:
                                     bars += " "
