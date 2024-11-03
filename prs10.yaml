@@ -1,0 +1,14 @@
+# Serial device name where PRS10's RS-232C port is connected.
+device: /dev/ttyUSB0
+
+# Timeout in seconds.
+timeout: 0.2
+
+interval:
+  seconds: 60
+
+# MQ address for logging.
+mq_pub: tcp://*:28651
+
+# MQ address for commanding from prs10 tool.
+mq_cmd: ipc:///tmp/0mq-prs10

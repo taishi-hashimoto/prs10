@@ -19,3 +19,5 @@ package-dir = {"" = "src"}
 
 [project.scripts]
 prs10stat = "prs10.__main__:prs10stat"
+prs10d = "prs10.__main__:prs10d"
+prs10 = "prs10.__main__:prs10"
